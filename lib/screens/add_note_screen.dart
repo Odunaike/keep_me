@@ -1,0 +1,110 @@
+import 'package:flutter/material.dart';
+import 'package:heroicons_flutter/heroicons_flutter.dart';
+
+class AddNoteScreen extends StatefulWidget {
+  const AddNoteScreen({Key? key}) : super(key: key);
+
+  @override
+  _AddNoteScreenState createState() => _AddNoteScreenState();
+}
+
+class _AddNoteScreenState extends State<AddNoteScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(100.0),
+        child: AddNoteAppBar(),
+      ),
+      backgroundColor: Color.fromARGB(233, 255, 251, 191),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(children: [
+          const TextField(
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+            decoration:
+                InputDecoration(hintText: "Title", border: InputBorder.none),
+          ),
+          Container(
+            height: 500,
+            child: TextField(
+                maxLines: 17,
+                style: TextStyle(fontSize: 20),
+                decoration: InputDecoration(
+                    hintText: "Content", border: InputBorder.none)),
+          )
+        ]),
+      ),
+      floatingActionButton: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 30,
+            ),
+            FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: Color.fromARGB(255, 15, 15, 15),
+              foregroundColor: Colors.white,
+              shape: const CircleBorder(),
+              child: const Icon(HeroiconsSolid.check),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            FloatingActionButton(
+                onPressed: () {},
+                backgroundColor: Color.fromARGB(233, 205, 201, 138),
+                foregroundColor: Colors.black,
+                shape: const CircleBorder(),
+                child: const Icon(HeroiconsOutline.bars3))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AddNoteAppBar extends StatelessWidget {
+  const AddNoteAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        child: ListTile(
+          leading: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.fromARGB(233, 205, 201, 138),
+            ),
+            child: Center(
+              child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: Icon(
+                    HeroiconsOutline.chevronLeft,
+                    size: 30,
+                  )),
+            ),
+          ),
+          trailing: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color.fromARGB(233, 205, 201, 138),
+            ),
+            child: Center(
+              child: Icon(
+                HeroiconsOutline.arrowUpOnSquare,
+                size: 30,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
