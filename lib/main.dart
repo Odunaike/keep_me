@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:heroicons_flutter/heroicons_flutter.dart';
-import 'package:keep_me/screens/add_note_screen.dart';
-import 'package:keep_me/screens/home_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keep_me/screens/add_note_screen/add_cubit.dart';
+import 'package:keep_me/screens/home_screen/home_bloc.dart';
+import 'package:keep_me/screens/home_screen/home_screen.dart';
 
 void main() {
-  runApp(MaterialApp(home: const MainApp()));
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -12,21 +13,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(padding: EdgeInsets.all(10), child: HomeScreen()),
-      ),
-      backgroundColor: Color.fromARGB(255, 15, 15, 15),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => AddNoteScreen()));
-        },
-        child: Icon(
-          HeroiconsSolid.plus,
-          size: 35,
-        ),
-      ),
-    );
+    return MaterialApp(
+        home: MultiBlocProvider(
+      providers: [
+        BlocProvider<AddNoteCubit>(create: (context) => AddNoteCubit()),
+        BlocProvider<HomeBloc>(create: (context) => HomeBloc())
+      ],
+      child: HomeScreen(),
+    ));
   }
 }

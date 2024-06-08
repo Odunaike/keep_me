@@ -7,7 +7,7 @@ class DatabaseHelper {
   static const String DATABASE_NAME = "NoteDatabase.db";
   static const String TABLE_NAME = 'note_table';
   static const DATABASE_VERSION = 1;
-  static const _COLUMN_ID = 'id';
+  static const COLUMN_ID = 'id';
   static const COLUMN_TITLE = 'title';
   static const COLUMN_CONTENT = 'content';
   static const COLUMN_CATEGORY = 'category';
@@ -29,7 +29,7 @@ class DatabaseHelper {
         onCreate: (Database db, int version) async {
       await db.execute('''
           CREATE TABLE $TABLE_NAME(
-            $_COLUMN_ID INTEGER PRIMARY KEY,
+            $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             $COLUMN_TITLE TEXT NOT NULL,
             $COLUMN_CONTENT TEXT NOT NULL,
             $COLUMN_CATEGORY TEXT
@@ -51,6 +51,6 @@ class DatabaseHelper {
   Future<int> deleteNote(int id) async {
     Database? db = await instance.database;
     return await db!
-        .delete(TABLE_NAME, where: '$_COLUMN_ID = ?', whereArgs: [id]);
+        .delete(TABLE_NAME, where: '$COLUMN_ID = ?', whereArgs: [id]);
   }
 }

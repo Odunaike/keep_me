@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heroicons_flutter/heroicons_flutter.dart';
+import 'package:keep_me/screens/add_note_screen/add_cubit.dart';
+import 'package:keep_me/screens/add_note_screen/add_note_screen.dart';
+import 'package:keep_me/screens/all_note_screen/all_note_screen.dart';
+import 'package:keep_me/screens/home_screen/home_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,21 +17,45 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Column(
-        children: [
-          TopHeader(),
-          SizedBox(
-            height: 20,
-          ),
-          ScrollableTabs(),
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [DailyPlanContainer(), ImageNoteContainer()]),
-        ],
+    final addCubit = context.read<AddNoteCubit>();
+    final homeBloc = context.read<HomeBloc>();
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  TopHeader(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ScrollableTabs(
+                    homeBloc: homeBloc,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [DailyPlanContainer(), ImageNoteContainer()]),
+                ],
+              ),
+            )),
+      ),
+      backgroundColor: Color.fromARGB(255, 15, 15, 15),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => BlocProvider<AddNoteCubit>.value(
+                    value: addCubit,
+                    child: AddNoteScreen(),
+                  )));
+        },
+        child: Icon(
+          HeroiconsSolid.plus,
+          size: 35,
+        ),
       ),
     );
   }
@@ -71,7 +101,8 @@ class TopHeader extends StatelessWidget {
 }
 
 class ScrollableTabs extends StatelessWidget {
-  const ScrollableTabs({super.key});
+  HomeBloc homeBloc;
+  ScrollableTabs({required this.homeBloc, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +110,15 @@ class ScrollableTabs extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          CustomTab(title: "All"),
+          GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BlocProvider<HomeBloc>.value(
+                          value: homeBloc..add(OnAllTabClickedEvent()),
+                          child: AllNoteScreen(),
+                        )));
+              },
+              child: CustomTab(title: "All")),
           CustomTab(title: "Important"),
           CustomTab(title: "Reminders"),
         ],
